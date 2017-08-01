@@ -116,7 +116,7 @@ BOOL_CONST          = t[rR][uU][eE]|f[aA][lL][sS][eE]
 TYPE_IDENTIFIER     = [A-Z][a-zA-Z0-9_]*
 OBJ_IDENTIFIER      = [a-z][a-zA-Z0-9_]*
 
-WHITESPACE          = [ \f\r\t\v\013]
+WHITESPACE          = [ \f\r\t\013]
 NEW_LINE            = \n
 
 SINGLE_COMMENT      = --.*
@@ -239,6 +239,7 @@ END_BLOCK_COMMENT   = \*\)
 
 <YYINITIAL>\" { yybegin(STRING); }
 <ERROR_STRING>\" { yybegin(YYINITIAL); }
+<ERROR_STRING>. { ; }
 <STRING>\" {
   yybegin(YYINITIAL);
   String text = string_buf.toString();
