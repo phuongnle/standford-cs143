@@ -69,6 +69,7 @@ nonterminal class_c class;
 nonterminal Features dummy_feature_list;
 nonterminal Feature feature;
 nonterminal Formals formals;
+nonterminal Formal formal;
 nonterminal Expressions expression_list;
 nonterminal Expression expression;
 
@@ -117,6 +118,17 @@ feature
 formals
     ::= /* empty */
         {: RESULT = new Formals(curr_lineno()); :}
+        |
+        formal:f
+        {: RESULT = (new Formals(curr_lineno())).appendElement(f); :}
+        |
+        formals:fs COMMA formal:f
+        {: RESULT = fs.appendElement(f); :}
+        ;
+
+formal
+    ::= OBJECTID:o COLON TYPEID:t
+        {: RESULT = new formalc(curr_lineno(),o, t); :}
         ;
 
 expression_list
