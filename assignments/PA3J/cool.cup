@@ -139,6 +139,9 @@ expression_list
     ::= /* empty */
         {: RESULT = new Expressions(curr_lineno()); :}
         |
+        expression:e
+        {: RESULT = (new Expressions(curr_lineno())).appendElement(e); :}
+        |
         expression_list: el SEMI expression:e
         {: RESULT = el.appendElement(e); :}
         ;
