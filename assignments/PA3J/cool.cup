@@ -110,9 +110,13 @@ dummy_feature_list
 
 feature
     ::= OBJECTID:n LPAREN formals:f RPAREN COLON TYPEID:t LBRACE expression:e RBRACE SEMI
-        {:
-            RESULT = new method(curr_lineno(), n, f, t, e);
-        :}
+        {: RESULT = new method(curr_lineno(), n, f, t, e); :}
+        |
+        OBJECTID:n COLON TYPEID:t SEMI
+        {: RESULT = new attr(curr_lineno(), n, t, new no_expr(curr_lineno())); :}
+        |
+        OBJECTID:n COLON TYPEID:t ASSIGN expression:e SEMI
+        {: RESULT = new attr(curr_lineno(), n, t, e); :}
         ;
 
 formals
