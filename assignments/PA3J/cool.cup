@@ -117,3 +117,35 @@ formals
     ::= /* empty */
         {: RESULT = new Formals(curr_lineno()); :}
         ;
+
+expression
+    ::=
+        /* const */
+        BOOL_CONST:n
+        {: RESULT = new bool_const(curr_lineno(), n); :}
+        |
+        INT_CONST:n
+        {: RESULT = new int_const(curr_lineno(), n); :}
+        |
+        STR_CONST:n
+        {: RESULT = new string_const(curr_lineno(), n); :}
+        |
+        /* identifier */
+        OBJECTID:n
+        {: RESULT = new object(curr_lineno(), n); :}
+        |
+        /* assignment */
+        OBJECTID:n ASSIGN expression:e
+        {: RESULT = new assign(curr_lineno(), n, e); :}
+        |
+        /* let */
+        LET OBJECTID:n COLON TYPEID:t IN expression:e
+        {: RESULT = new let(curr_lineno(), n, t, new no_expr(curr_lineno()), e); :}
+        |
+        LET OBJECTID:n COLON TYPEID:t ASSIGN expression:init IN expression:e
+        {: RESULT = new let(curr_lineno(), n, t, init, e); :}
+        |
+        /* plus */
+        expression:e1 PLUS expression:e2
+        {: RESULT = new plus(curr_lineno(), e1, e2); :}
+        ;
