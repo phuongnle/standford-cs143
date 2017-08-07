@@ -72,6 +72,8 @@ nonterminal Formals formals;
 nonterminal Formal formal;
 nonterminal Expressions expression_list;
 nonterminal Expression expression;
+nonterminal Cases case_list;
+nonterminal Case scase;
 
 /* Precedence declarations go here. */
 
@@ -188,7 +190,24 @@ expression
         LET OBJECTID:n COLON TYPEID:t ASSIGN expression:init IN expression:e
         {: RESULT = new let(curr_lineno(), n, t, init, e); :}
         |
+        /* case */
+        CASE expression:e0 OF case_list:c ESAC
+        {: RESULT = new typcase(curr_lineno(), e0, c); :}
+        |
         /* plus */
         expression:e1 PLUS expression:e2
         {: RESULT = new plus(curr_lineno(), e1, e2); :}
+        ;
+
+case_list
+    ::= /* empty */
+        {: RESULT = new Cases(curr_lineno()); :}
+        |
+        case_list:cs scase:sc
+        {: RESULT = cs.appendElement(sc); :}
+        ;
+
+scase
+    ::= OBJECTID:n TYPEID:t DARROW expression:e SEMI
+        {: RESULT = new branch(curr_lineno(), n, t, e); :}
         ;
