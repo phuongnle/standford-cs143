@@ -69,6 +69,7 @@ nonterminal class_c class;
 nonterminal Features dummy_feature_list;
 nonterminal Feature feature;
 nonterminal Formals formals;
+nonterminal Expressions expression_list;
 nonterminal Expression expression;
 
 /* Precedence declarations go here. */
@@ -118,6 +119,14 @@ formals
         {: RESULT = new Formals(curr_lineno()); :}
         ;
 
+expression_list
+    ::= /* empty */
+        {: RESULT = new Expressions(curr_lineno()); :}
+        |
+        expression_list: el SEMI expression:e
+        {: RESULT = el.appendElement(e); :}
+        ;
+
 expression
     ::=
         /* const */
@@ -137,6 +146,10 @@ expression
         /* assignment */
         OBJECTID:n ASSIGN expression:e
         {: RESULT = new assign(curr_lineno(), n, e); :}
+        |
+        /* block */
+        LBRACE expression_list:el RBRACE
+        {: RESULT = new block(curr_lineno(), el); :}
         |
         /* let */
         LET OBJECTID:n COLON TYPEID:t IN expression:e
