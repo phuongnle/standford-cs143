@@ -163,6 +163,13 @@ expression
         OBJECTID:n ASSIGN expression:e
         {: RESULT = new assign(curr_lineno(), n, e); :}
         |
+        /* condition */
+        IF expression:c THEN expression:t FI
+        {: RESULT = new cond(curr_lineno(), c, t, new no_expr(curr_lineno())); :}
+        |
+        IF expression:c THEN expression:t ELSE expression:e FI
+        {: RESULT = new cond(curr_lineno(), c, t, e); :}
+        |
         /* block */
         LBRACE expression_list:el RBRACE
         {: RESULT = new block(curr_lineno(), el); :}
