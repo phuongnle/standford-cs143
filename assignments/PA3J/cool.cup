@@ -138,14 +138,15 @@ formal
         ;
 
 expression_list
-    ::= /* empty */
-        {: RESULT = new Expressions(curr_lineno()); :}
-        |
-        expression:e
+    ::= expression:e SEMI
         {: RESULT = (new Expressions(curr_lineno())).appendElement(e); :}
         |
-        expression_list: el SEMI expression:e
+        expression_list: el expression:e SEMI
         {: RESULT = el.appendElement(e); :}
+        |
+        error SEMI
+        |
+        error
         ;
 
 expression
