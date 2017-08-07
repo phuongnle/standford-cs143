@@ -173,6 +173,10 @@ expression
         IF expression:c THEN expression:t ELSE expression:e FI
         {: RESULT = new cond(curr_lineno(), c, t, e); :}
         |
+        /* loop */
+        WHILE expression:e LOOP expression:l POOL
+        {: RESULT = new loop(curr_lineno(), e, l); :}
+        |
         /* block */
         LBRACE expression_list:el RBRACE
         {: RESULT = new block(curr_lineno(), el); :}
