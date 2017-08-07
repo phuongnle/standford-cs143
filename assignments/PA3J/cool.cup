@@ -75,6 +75,9 @@ nonterminal Expression expression;
 nonterminal Cases case_list;
 nonterminal Case scase;
 
+/* Precedences */
+precedence left PLUS, MINUS;
+precedence left MULT, DIV;
 /* Precedence declarations go here. */
 
 program
@@ -198,6 +201,18 @@ expression
         /* plus */
         expression:e1 PLUS expression:e2
         {: RESULT = new plus(curr_lineno(), e1, e2); :}
+        |
+        /* minus */
+        expression:e1 MINUS expression:e2
+        {: RESULT = new sub(curr_lineno(), e1, e2); :}
+        |
+        /* multiply */
+        expression:e1 MULT expression:e2
+        {: RESULT = new mul(curr_lineno(), e1, e2); :}
+        |
+        /* divide */
+        expression:e1 DIV expression:e2
+        {: RESULT = new divide(curr_lineno(), e1, e2); :}
         ;
 
 case_list
